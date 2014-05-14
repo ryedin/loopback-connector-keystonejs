@@ -1,0 +1,13 @@
+.project
+.DS_Store
+*.sublime*
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.swp
+*.swo
+node_modules
+npm-debug.log
