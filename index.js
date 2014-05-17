@@ -12,7 +12,8 @@ var filterWhitelist = [
   'where',
   'populate',
   'sort',
-  'limit'
+  'limit',
+  'regex'
 ];
 
 /**
@@ -96,18 +97,21 @@ KeyStoneJS.prototype.create = function (model, data, callback) {
     debug('create', model, data);
   }
 
+  var prefixedModel = model;
+
   if (this.modelPrefix) {
     model = this.removeModelPrefix(model);
+    prefixedModel = this.modelPrefix + model;
   }
 
-  //TODO: deal with idValue and idName
+  //NOTE: still need prefixed name for internal methods getIdValue and idName...
 
-  // var idValue = self.getIdValue(model, data);
-  // var idName = self.idName(model);
+  var idValue = self.getIdValue(prefixedModel, data);
+  var idName = self.idName(prefixedModel);
 
-  // if (idValue === null) {
-  //   delete data[idName]; // Allow KeyStoneJS to generate the id
-  // } 
+  if (idValue === null) {
+    delete data[idName]; // Allow KeyStoneJS to generate the id
+  } 
 
   var obj = new this.keystone.lists[model].model(data);
   obj.save(function(err) {
@@ -272,9 +276,9 @@ KeyStoneJS.prototype.all = function all(model, filter, callback) {
   }
 
   if (!filter) {
-    filter = {};
+    filter = [];
   }
-
+  
   // var idName = self.idName(model);
   // var query = {};
 
