@@ -355,18 +355,21 @@ KeyStoneJS.prototype.all = function all(model, filter, callback) {
  * @param {Object} filter The filter for where
  *
  */
-// KeyStoneJS.prototype.count = function count(model, callback, where) {
-//   var self = this;
-//   if (self.debug) {
-//     debug('count', model, where);
-//   }
-//   this.collection(model).count(where, function (err, count) {
-//     if (self.debug) {
-//       debug('count.callback', model, err, count);
-//     }
-//     callback && callback(err, count);
-//   });
-// };
+KeyStoneJS.prototype.count = function count(model, callback, where) {
+  var self = this;
+  if (self.debug) {
+    debug('count', model, where);
+  }
+  
+  // var idName = self.idName(model);
+  // var query = {};
+
+  if (this.modelPrefix) {
+    model = this.removeModelPrefix(model);
+  }
+
+  var query = this.keystone.lists[model].model.count(where, callback);
+};
 
 /**
  * Update properties for the model instance data
